@@ -1,0 +1,62 @@
+@import "../../styles/variables.scss";
+@import "../../styles/utilities.scss";
+@import "../../styles/mixins.scss";
+
+.welcome {
+  height: 100vh;
+  background-image: $primary-gradient, url("../../assets/welcome.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding-top: 20px;
+  position: relative;
+
+  &__main {
+    margin: 240px auto;
+    text-align: center;
+    max-width: 60%;
+  }
+
+  &__message {
+    color: $white;
+    font-weight: 300;
+    font-size: 20px;
+    margin: 10px 0 35px 0;
+  }
+
+  &__input {
+    width: 310px;
+    height: 40px;
+    border: 3px solid #8280d7;
+    border-radius: 5px;
+    padding: 5px 7px;
+    font-size: 20px;
+    display: block;
+    margin: 0 auto 35px auto;
+  }
+
+  &__submit {
+    @include btn;
+    &:hover {
+      border: 2px solid $white;
+      background-color: #f26942;
+      color: $white;
+    }
+  }
+
+  &__change-org-btn {
+    display: block;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: wheat;
+    font-size: 15px;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translate(-50%);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
