@@ -7,3 +7,12 @@
   color: $white;
   cursor: pointer;
 }
+
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+        @media only screen and (max-width: 600px) { @content };
+    }
+    @if $breakpoint == tablet {
+        @media only screen and (max-width: 900px) { @content };
+    }
+}

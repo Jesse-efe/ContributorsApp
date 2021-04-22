@@ -1,5 +1,5 @@
 @import "../../styles/variables.scss";
-@import "../../styles/utilities.scss";
+@import "../../styles/typography.scss";
 @import "../../styles/mixins.scss";
 
 .welcome {
@@ -12,9 +12,16 @@
   position: relative;
 
   &__main {
-    margin: 240px auto;
+    margin: 240px auto 0 auto;
     text-align: center;
     max-width: 60%;
+    @include respond(tablet) {
+      max-width: 80%;
+    }
+    @include respond(phone) {
+      max-width: 93%;
+      margin: 20vh auto 0 auto;
+    }
   }
 
   &__message {
