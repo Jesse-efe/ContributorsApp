@@ -1,0 +1,14 @@
+@import "./mixins.scss";
+
+.heading-primary {
+  color: $white;
+  font-size: 72px;
+  letter-spacing: 0.5px;
+
+  @include respond(tablet) {
+    font-size: 57px;
+  }
+  @include respond(phone) {
+    font-size: 45px;
+  }
+}
