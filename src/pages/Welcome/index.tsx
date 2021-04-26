@@ -1,31 +1,22 @@
 import * as React from "react";
+import { useQuery } from "@apollo/client";
+import { useHistory } from "react-router";
+import {GET_ORG_INFO} from "../../queries"
 import "./style.scss";
-import { useQuery, gql } from "@apollo/client";
-
-const GET_ORG_INFO = gql`
-  query($name: String!) {
-    organization(login: $name) {
-      name
-      url
-      id
-    }
-  }
-`;
 
 const Welcome = () => {
   const [showOrgInput, setOrgInput] = React.useState(false);
   const [message, setMessagee] = React.useState("");
   const [fetchData, setFetchData] = React.useState(false);
-  // TODO: remove appData state
-  const [appData, setAppData] = React.useState<string | null>(null);
+  const history = useHistory();
 
   const orgInput = React.useRef<HTMLInputElement>(null!);
   const { loading } = useQuery(GET_ORG_INFO, {
     variables: { name: orgInput.current?.value.trim() || "angular" },
     skip: !fetchData,
     onCompleted: (result) => {
-      // TODO: store the org id in session and redirect to listing page here
-      setAppData(result);
+      sessionStorage.setItem("organistionName", result.organization.login);
+      history.push("/contributors");
       setFetchData(false);
     },
     onError: (error) => {
@@ -44,7 +35,6 @@ const Welcome = () => {
     if (showOrgInput && orgInput.current.value.trim().length === 0) {
       return setMessagee("Please specify an orginisation name");
     }
-    setAppData(null);
     setFetchData(true);
   };
 
@@ -72,9 +62,7 @@ const Welcome = () => {
             placeholder="enter organisation name"
           />
         )}
-        <pre>
-          {loading ? "loading" : appData ? JSON.stringify(appData) : message}
-        </pre>
+        <pre>{loading ? "loading" : message}</pre>
         <button className="welcome__submit" onClick={onSubmit}>
           GO!
         </button>
