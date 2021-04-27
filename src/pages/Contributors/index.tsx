@@ -46,13 +46,38 @@ const Contributors = () => {
     fetchPolicy: "no-cache",
   });
 
+  const sortUsers = (
+    field: "contributions" | "repositories" | "followers" | "gists"
+  ) => {
+    const users = [...data!];
+    const sortFunction = (a: node, b: node) => {
+      if (field === "contributions") {
+        return (
+          b.contributionsCollection.contributionCalendar.totalContributions -
+          a.contributionsCollection.contributionCalendar.totalContributions
+        );
+      }
+      return b[field].totalCount - a[field].totalCount;
+    };
+    users.sort(sortFunction);
+    setData(users);
+  };
+
   return (
     <div className="contributors">
       <h1>this are the contributors</h1>
       {loading && <p>loading</p>}
+      <div className="sort-box">
+        <button onClick={() => sortUsers("contributions")}>
+          Contributions
+        </button>
+        <button onClick={() => sortUsers("repositories")}>Repositories</button>
+        <button onClick={() => sortUsers("followers")}>Followers</button>
+        <button onClick={() => sortUsers("gists")}>Gists</button>
+      </div>
       {data &&
         data.map((person: node) => (
-          <div className="contributor" key={person.name}>
+          <div className="contributor" key={person.name || Math.random()}>
             <p>Name: {person.name}</p>
             <p>
               contributions:{" "}

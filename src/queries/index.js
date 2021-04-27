@@ -14,7 +14,7 @@ export const GET_ORG_INFO = gql`
 export const GET_ORG_CONTRIBUTORS = gql`
   query($orgName: String!, $cursor: String) {
     organization(login: $orgName) {
-      membersWithRole(first: 10, after: $cursor) {
+      membersWithRole(first: 15, after: $cursor) {
         nodes {
           name
           contributionsCollection {
