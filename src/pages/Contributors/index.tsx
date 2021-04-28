@@ -1,10 +1,13 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GET_ORG_CONTRIBUTORS } from "../../queries";
+import { useHistory } from "react-router";
+import { GET_ORG_CONTRIBUTORS, CACHED_CONTRIBUTORS } from "../../queries";
+import { useApolloClient } from "@apollo/client";
 import "./style.scss";
 
 interface node {
   name: string;
+  login: string;
   contributionsCollection: {
     contributionCalendar: {
       totalContributions: number;
@@ -23,20 +26,46 @@ interface node {
 
 const Contributors = () => {
   const [data, setData] = React.useState<node[] | null>(null);
-  const [fetchData, setFetchData] = React.useState(true);
+  const [fetchData, setFetchData] = React.useState(false);
   const [endCursor, setEndCursor] = React.useState(null);
-  const [hasNextPage, setHasNextPage] = React.useState(false);
+  const history = useHistory();
+  const client = useApolloClient();
+
+  const cachedContributors = client.readQuery({
+    query: CACHED_CONTRIBUTORS,
+  });
+
+  React.useEffect(() => {
+    if (cachedContributors) {
+      setData(cachedContributors.contributors.data);
+      setEndCursor(cachedContributors.contributors.endCursor);
+    } else {
+      setFetchData(true);
+    }
+  }, []);
 
   const { loading } = useQuery(GET_ORG_CONTRIBUTORS, {
     onCompleted: ({
       organization: {
-        membersWithRole: { pageInfo, nodes },
+        membersWithRole: {
+          pageInfo: { endCursor, hasNextPage },
+          nodes,
+        },
       },
     }) => {
       setFetchData(false);
-      setEndCursor(pageInfo.endCursor);
-      setHasNextPage(pageInfo.hasNextPage);
-      return !data ? setData([...nodes]) : setData([...data, ...nodes]);
+      setEndCursor(hasNextPage ? endCursor : null);
+      const newData = !data ? [...nodes] : [...data, ...nodes];
+      client.writeQuery({
+        query: CACHED_CONTRIBUTORS,
+        data: {
+          contributors: {
+            data: newData,
+            endCursor,
+          },
+        },
+      });
+      setData(newData);
     },
     variables: {
       orgName: sessionStorage.getItem("organistionName"),
@@ -77,7 +106,11 @@ const Contributors = () => {
       </div>
       {data &&
         data.map((person: node) => (
-          <div className="contributor" key={person.name || Math.random()}>
+          <div
+            className="contributor"
+            key={person.login}
+            onClick={() => history.push(`/contributors/${person.login}`)}
+          >
             <p>Name: {person.name}</p>
             <p>
               contributions:{" "}
@@ -91,7 +124,7 @@ const Contributors = () => {
             <p>gists: {person.gists.totalCount}</p>
           </div>
         ))}
-      {hasNextPage && (
+      {endCursor && (
         <button onClick={() => setFetchData(true)}>
           {loading ? "Loading" : "Fetch more"}
         </button>
