@@ -17,6 +17,7 @@ export const GET_ORG_CONTRIBUTORS = gql`
       membersWithRole(first: 15, after: $cursor) {
         nodes {
           name
+          login
           contributionsCollection {
             contributionCalendar {
               totalContributions
@@ -37,6 +38,47 @@ export const GET_ORG_CONTRIBUTORS = gql`
           hasNextPage
         }
       }
+    }
+  }
+`;
+
+export const GET_USER_DETAILS = gql`
+  query($loginName: String!, $cursor: String) {
+    user(login: $loginName) {
+      name
+      bio
+      company
+      avatarUrl
+      twitterUsername
+      websiteUrl
+      url
+      status {
+        message
+      }
+      topRepositories(
+        first: 30
+        after: $cursor
+        orderBy: { field: NAME, direction: ASC }
+      ) {
+        totalCount
+        nodes {
+          name
+          id
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+`;
+
+export const CACHED_CONTRIBUTORS = gql`
+  {
+    contributors {
+      data
+      endCursor
     }
   }
 `;
