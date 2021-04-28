@@ -15,8 +15,7 @@ const Welcome = () => {
     variables: { name: orgInput.current?.value.trim() || "angular" },
     skip: !fetchData,
     onCompleted: (result) => {
-      sessionStorage.setItem("organistionName", result.organization.login);
-      history.push("/contributors");
+      history.push(`/${result.organization.login}`);
       setFetchData(false);
     },
     onError: (error) => {

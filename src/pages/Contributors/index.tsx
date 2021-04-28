@@ -1,8 +1,15 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { useHistory } from "react-router";
-import { GET_ORG_CONTRIBUTORS, CACHED_CONTRIBUTORS } from "../../queries";
+import { useHistory, useParams } from "react-router";
+import { Redirect } from "react-router-dom";
 import { useApolloClient } from "@apollo/client";
+import EntityInfo from "../../components/EntityInfo";
+import SortBar from "../../components/SortBar";
+import {
+  GET_ORG_CONTRIBUTORS,
+  CACHED_CONTRIBUTORS,
+  GET_ORG_INFO,
+} from "../../queries";
 import "./style.scss";
 
 interface node {
@@ -30,6 +37,12 @@ const Contributors = () => {
   const [endCursor, setEndCursor] = React.useState(null);
   const history = useHistory();
   const client = useApolloClient();
+  let { organization } = useParams<{ organization: string }>();
+
+  const orgInfo = client.readQuery({
+    query: GET_ORG_INFO,
+    variables: { name: organization.toLowerCase() },
+  });
 
   const cachedContributors = client.readQuery({
     query: CACHED_CONTRIBUTORS,
@@ -45,6 +58,12 @@ const Contributors = () => {
   }, []);
 
   const { loading } = useQuery(GET_ORG_CONTRIBUTORS, {
+    variables: {
+      orgName: orgInfo?.organization.login,
+      cursor: endCursor,
+    },
+    skip: !fetchData,
+    fetchPolicy: "no-cache",
     onCompleted: ({
       organization: {
         membersWithRole: {
@@ -67,12 +86,6 @@ const Contributors = () => {
       });
       setData(newData);
     },
-    variables: {
-      orgName: sessionStorage.getItem("organistionName"),
-      cursor: endCursor,
-    },
-    skip: !fetchData,
-    fetchPolicy: "no-cache",
   });
 
   const sortUsers = (
@@ -91,19 +104,19 @@ const Contributors = () => {
     users.sort(sortFunction);
     setData(users);
   };
-
+console.log(orgInfo)
+  if (!orgInfo?.organization) return <Redirect to="/" />;
   return (
     <div className="contributors">
-      <h1>this are the contributors</h1>
+      <EntityInfo
+        title={orgInfo?.organization.name}
+        intro={
+          orgInfo?.organization.description ||
+          `learn more about ${orgInfo?.organization.name} organization at ${orgInfo?.organization.url}`
+        }
+      />
+      <SortBar sortFunction={sortUsers} />
       {loading && <p>loading</p>}
-      <div className="sort-box">
-        <button onClick={() => sortUsers("contributions")}>
-          Contributions
-        </button>
-        <button onClick={() => sortUsers("repositories")}>Repositories</button>
-        <button onClick={() => sortUsers("followers")}>Followers</button>
-        <button onClick={() => sortUsers("gists")}>Gists</button>
-      </div>
       {data &&
         data.map((person: node) => (
           <div

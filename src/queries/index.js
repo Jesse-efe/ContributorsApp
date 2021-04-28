@@ -7,6 +7,7 @@ export const GET_ORG_INFO = gql`
       url
       id
       login
+      description
     }
   }
 `;
