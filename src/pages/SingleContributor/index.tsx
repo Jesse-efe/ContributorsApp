@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useQuery } from "@apollo/client";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import { GET_USER_DETAILS } from "../../queries";
 import PersonDetails from "../../components/PersonDetails";
 import SingleRepo from "../../components/SingleRepo";
@@ -10,6 +10,9 @@ interface repo {
   name: string;
   description: string;
   id: string;
+  owner: {
+    login: string;
+  };
 }
 
 interface dataObject {
@@ -30,7 +33,8 @@ function SingleContributor() {
   const [userRepos, setUserRepos] = React.useState<repo[]>([]);
   const [fetchData, setFetchData] = React.useState(true);
   const [hasNextPage, setHasNextPage] = React.useState(false);
-  let { loginName } = useParams<{ loginName: string }>();
+  const history = useHistory();
+  const { loginName } = useParams<{ loginName: string }>();
 
   const { loading } = useQuery(GET_USER_DETAILS, {
     onCompleted: ({
@@ -93,6 +97,9 @@ function SingleContributor() {
               name={repo.name}
               description={repo.description}
               key={repo.id}
+              clickHandler={() =>
+                history.push(`/repository/${repo.name}/${repo.owner.login}`)
+              }
             />
           ))
         ) : (

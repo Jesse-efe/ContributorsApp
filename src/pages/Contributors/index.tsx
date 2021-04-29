@@ -52,6 +52,10 @@ const Contributors = () => {
     query: CACHED_CONTRIBUTORS,
   });
 
+  const orgLogin = sessionStorage.getItem("organisationLogin");
+  const orgName = sessionStorage.getItem("organisationName");
+  const orgDescription = sessionStorage.getItem("organisationDesc");
+
   React.useEffect(() => {
     if (cachedContributors) {
       setData(cachedContributors.contributors.data);
@@ -63,7 +67,7 @@ const Contributors = () => {
 
   const { loading } = useQuery(GET_ORG_CONTRIBUTORS, {
     variables: {
-      orgName: orgInfo?.organization.login,
+      orgName: orgLogin,
       cursor: endCursor,
     },
     skip: !fetchData,
@@ -108,14 +112,17 @@ const Contributors = () => {
     users.sort(sortFunction);
     setData(users);
   };
-  if (!orgInfo?.organization) return <Redirect to="/" />;
+
+  if (!orgLogin) return <Redirect to="/" />;
   return (
     <div className="page">
       <EntityInfo
-        title={orgInfo?.organization.name}
+        title={orgName!}
         intro={
-          orgInfo?.organization.description ||
-          `learn more about ${orgInfo?.organization.name} organization at ${orgInfo?.organization.url}`
+          orgDescription ||
+          `learn more about ${orgName} organization at ${
+            orgInfo?.organization.url ?? "below"
+          }`
         }
       />
       <SortBar sortFunction={sortUsers} />
@@ -139,6 +146,7 @@ const Contributors = () => {
               clickHandler={() => history.push(`/contributors/${person.login}`)}
             />
           ))}
+        {data && data.length === 0 && <p>No Collaborators</p>}
       </div>
       {endCursor && (
         <button onClick={() => setFetchData(true)} className="button mx-auto">

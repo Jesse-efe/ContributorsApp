@@ -8,6 +8,10 @@
   &__menu {
     list-style: none;
     display: flex;
+
+    & > a {
+      text-decoration: none;
+    }
   }
 
   &__menu-item {
@@ -17,5 +21,9 @@
     text-transform: uppercase;
     margin-right: 25px;
     cursor: pointer;
+
+    &--active > & {
+      color: gold;
+    }
   }
 }

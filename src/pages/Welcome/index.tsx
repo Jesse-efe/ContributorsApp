@@ -1,22 +1,32 @@
 import * as React from "react";
-import { useQuery } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 import { useHistory } from "react-router";
-import {GET_ORG_INFO} from "../../queries"
+import { GET_ORG_INFO } from "../../queries";
 import "./style.scss";
 
 const Welcome = () => {
   const [showOrgInput, setOrgInput] = React.useState(false);
   const [message, setMessagee] = React.useState("");
   const [fetchData, setFetchData] = React.useState(false);
+  const client = useApolloClient();
   const history = useHistory();
 
   const orgInput = React.useRef<HTMLInputElement>(null!);
   const { loading } = useQuery(GET_ORG_INFO, {
     variables: { name: orgInput.current?.value.trim() || "angular" },
     skip: !fetchData,
-    onCompleted: (result) => {
-      history.push(`/${result.organization.login}`);
+    onCompleted: ({ organization }) => {
+      client.cache.reset();
+      const {
+        login,
+        description,
+        name,
+      }: { [key: string]: string } = organization;
+      sessionStorage.setItem("organisationName", login);
+      sessionStorage.setItem("organisationLogin", name);
+      sessionStorage.setItem("organisationDesc", description);
       setFetchData(false);
+      history.push(`/${login}`);
     },
     onError: (error) => {
       setFetchData(false);
@@ -63,7 +73,7 @@ const Welcome = () => {
         )}
         <pre>{message}</pre>
         <button className="button" onClick={onSubmit}>
-           {loading ? <div className="spinner--small"></div> : 'GO!'}
+          {loading ? <div className="spinner--small"></div> : "GO!"}
         </button>
         <button className="welcome__change-org-btn" onClick={changeOrgClick}>
           {showOrgInput ? "use default organisation" : "change organisation"}
