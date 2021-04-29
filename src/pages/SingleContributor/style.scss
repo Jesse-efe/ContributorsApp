@@ -1,5 +1,25 @@
-.contributor-bio {
-  padding-bottom: 20px;
-  border-bottom: 1px solid lightgrey;
-  margin-bottom: 40px;
+@import "../../styles/mixins.scss";
+
+.contributor{
+  @include respond(phone) {
+    text-align: center;
+  }
+
+  &__bio {
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 40px;
+    @include respond(phone) {
+      width: 90%;
+      margin: 0 auto 40px auto;
+      text-align: center;
+    }
+  }
+
+  &__heading{
+    margin-left: 15px;
+    @include respond(phone) {
+      margin: 0 0 30px 0;
+    }
+  }
 }

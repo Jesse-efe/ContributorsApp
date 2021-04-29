@@ -1,9 +1,13 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .app-header {
   height: 60px;
   background: $primary-gradient;
   padding: 20px 50px;
+  @include respond(phone) {
+    padding: 20px 0px 20px 30px;
+  }
 
   &__menu {
     list-style: none;

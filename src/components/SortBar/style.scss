@@ -1,4 +1,5 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .sort-bar {
   height: 70px;
@@ -10,6 +11,12 @@
   position: relative;
   top: -35px;
 
+  @include respond(smallTab) {
+    width: 80%;
+    height: fit-content;
+    text-align: center;
+  }
+
   &__text {
     font-weight: 600;
     font-size: 15px;
@@ -19,6 +26,10 @@
   &__buttons {
     display: flex;
     margin-top: 7px;
+    @include respond(smallTab) {
+      display: block;
+    }
+
     & > * {
       height: 25px;
       padding: 3px 15px;
@@ -29,6 +40,12 @@
       border-radius: 4px;
       font-weight: 600;
       cursor: pointer;
+
+      @include respond(smallTab) {
+        width: 70%;
+        text-align: center;
+        margin: 0 0 10px 0;
+      }
     }
   }
 }

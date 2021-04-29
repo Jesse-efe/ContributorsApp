@@ -64,26 +64,28 @@ const Repository = () => {
       {repoData && (
         <>
           <EntityInfo title={repoData.name} intro={repoData.description} />
-          <h2 className="heading-tertiary mx-auto">Collaborators</h2>
-          <div className="contributors page-body">
-            {repoData.contributors.map((person: node) => (
-              <PersonCard
-                pictureUrl={person.avatarUrl}
-                name={person.name}
-                bio={person.bio}
-                key={person.login}
-                contributions={
-                  person.contributionsCollection.contributionCalendar
-                    .totalContributions
-                }
-                gists={person.gists.totalCount}
-                followers={person.followers.totalCount}
-                repositories={person.repositories.totalCount}
-                clickHandler={() =>
-                  history.push(`/contributors/${person.login}`)
-                }
-              />
-            ))}
+          <div className="page-body">
+            <h2 className="heading-tertiary repo-heading">Collaborators</h2>
+            <div className="contributors">
+              {repoData.contributors.map((person: node) => (
+                <PersonCard
+                  pictureUrl={person.avatarUrl}
+                  name={person.name}
+                  bio={person.bio}
+                  key={person.login}
+                  contributions={
+                    person.contributionsCollection.contributionCalendar
+                      .totalContributions
+                  }
+                  gists={person.gists.totalCount}
+                  followers={person.followers.totalCount}
+                  repositories={person.repositories.totalCount}
+                  clickHandler={() =>
+                    history.push(`/contributors/${person.login}`)
+                  }
+                />
+              ))}
+            </div>
           </div>
         </>
       )}

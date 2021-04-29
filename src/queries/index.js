@@ -99,7 +99,7 @@ export const GET_REPO_DETAILS = gql`
       name
       id
       description
-      mentionableUsers(first: 30) {
+      mentionableUsers(first: 20) {
         nodes {
           name
           login

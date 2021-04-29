@@ -88,9 +88,9 @@ function SingleContributor() {
           gists={userData.gists}
         />
       )}
-      <div className="page-body">
-        <div className="contributor-bio">{userData?.bio}</div>
-        <h2 className="heading-tertiary">Top Repositories</h2>
+      <div className="page-body contributor">
+        <div className="contributor__bio">{userData?.bio}</div>
+        <h2 className="heading-tertiary contributor__heading">Top Repositories</h2>
         {userRepos.length > 1 ? (
           userRepos.map((repo) => (
             <SingleRepo
