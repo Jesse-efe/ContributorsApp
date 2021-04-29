@@ -19,6 +19,8 @@ export const GET_ORG_CONTRIBUTORS = gql`
         nodes {
           name
           login
+          bio
+          avatarUrl
           contributionsCollection {
             contributionCalendar {
               totalContributions

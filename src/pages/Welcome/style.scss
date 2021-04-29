@@ -42,15 +42,6 @@
     margin: 0 auto 35px auto;
   }
 
-  &__submit {
-    @include btn;
-    &:hover {
-      border: 2px solid $white;
-      background-color: #f26942;
-      color: $white;
-    }
-  }
-
   &__change-org-btn {
     display: block;
     background-color: transparent;

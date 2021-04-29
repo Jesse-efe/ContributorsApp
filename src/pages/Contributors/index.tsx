@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import { useApolloClient } from "@apollo/client";
 import EntityInfo from "../../components/EntityInfo";
 import SortBar from "../../components/SortBar";
+import PersonCard from "../../components/PersonCard";
+
 import {
   GET_ORG_CONTRIBUTORS,
   CACHED_CONTRIBUTORS,
@@ -15,6 +17,8 @@ import "./style.scss";
 interface node {
   name: string;
   login: string;
+  bio: string;
+  avatarUrl: string;
   contributionsCollection: {
     contributionCalendar: {
       totalContributions: number;
@@ -104,10 +108,10 @@ const Contributors = () => {
     users.sort(sortFunction);
     setData(users);
   };
-console.log(orgInfo)
-  if (!orgInfo?.organization) return <Redirect to="/" />;
+  console.log(orgInfo);
+    if (!orgInfo?.organization) return <Redirect to="/" />;
   return (
-    <div className="contributors">
+    <div className="page">
       <EntityInfo
         title={orgInfo?.organization.name}
         intro={
@@ -116,30 +120,29 @@ console.log(orgInfo)
         }
       />
       <SortBar sortFunction={sortUsers} />
-      {loading && <p>loading</p>}
-      {data &&
-        data.map((person: node) => (
-          <div
-            className="contributor"
-            key={person.login}
-            onClick={() => history.push(`/contributors/${person.login}`)}
-          >
-            <p>Name: {person.name}</p>
-            <p>
-              contributions:{" "}
-              {
+
+      {loading && <div className="spinner--dark mx-auto"></div>}
+      <div className="contributors">
+        {data &&
+          data.map((person: node) => (
+            <PersonCard
+              pictureUrl={person.avatarUrl}
+              name={person.name}
+              bio={person.bio}
+              contributions={
                 person.contributionsCollection.contributionCalendar
                   .totalContributions
               }
-            </p>
-            <p>followers: {person.followers.totalCount}</p>
-            <p>repositories: {person.repositories.totalCount}</p>
-            <p>gists: {person.gists.totalCount}</p>
-          </div>
-        ))}
+              gists={person.gists.totalCount}
+              followers={person.followers.totalCount}
+              repositories={person.repositories.totalCount}
+              clickHandler={() => history.push(`/contributors/${person.login}`)}
+            />
+          ))}
+      </div>
       {endCursor && (
-        <button onClick={() => setFetchData(true)}>
-          {loading ? "Loading" : "Fetch more"}
+        <button onClick={() => setFetchData(true)} className="button mx-auto">
+          Fetch more {loading && <div className="spinner--small"></div>}
         </button>
       )}
     </div>

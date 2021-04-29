@@ -12,12 +12,13 @@
 
   &__text {
     font-weight: 600;
+    font-size: 15px;
     text-transform: capitalize;
   }
 
   &__buttons {
     display: flex;
-    margin-top: 4px;
+    margin-top: 7px;
     & > * {
       height: 25px;
       padding: 3px 15px;
