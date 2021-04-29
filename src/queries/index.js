@@ -71,6 +71,9 @@ export const GET_USER_DETAILS = gql`
           name
           description
           id
+          owner {
+            login
+          }
         }
         pageInfo {
           endCursor
@@ -86,6 +89,38 @@ export const CACHED_CONTRIBUTORS = gql`
     contributors {
       data
       endCursor
+    }
+  }
+`;
+
+export const GET_REPO_DETAILS = gql`
+  query($repoName: String!, $ownerLogin: String!) {
+    repository(name: $repoName, owner: $ownerLogin) {
+      name
+      id
+      description
+      mentionableUsers(first: 30) {
+        nodes {
+          name
+          login
+          bio
+          avatarUrl
+          contributionsCollection {
+            contributionCalendar {
+              totalContributions
+            }
+          }
+          followers {
+            totalCount
+          }
+          repositories(privacy: PUBLIC) {
+            totalCount
+          }
+          gists {
+            totalCount
+          }
+        }
+      }
     }
   }
 `;

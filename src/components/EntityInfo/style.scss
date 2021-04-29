@@ -5,6 +5,10 @@
   background: $primary-gradient;
   padding: 30px 170px;
 
+  &__title {
+    text-transform: capitalize;
+  }
+
   &__bio {
     font-size: 14px;
     color: $white;
