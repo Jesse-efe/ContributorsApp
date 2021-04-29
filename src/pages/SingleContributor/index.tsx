@@ -2,10 +2,13 @@ import * as React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router";
 import { GET_USER_DETAILS } from "../../queries";
+import PersonDetails from "../../components/PersonDetails";
+import SingleRepo from "../../components/SingleRepo";
 import "./style.scss";
 
 interface repo {
   name: string;
+  description: string;
   id: string;
 }
 
@@ -18,6 +21,8 @@ interface dataObject {
   url: string;
   totalRepos: number;
   reposEndcursor: string;
+  followers: number;
+  gists: number;
 }
 
 function SingleContributor() {
@@ -37,6 +42,8 @@ function SingleContributor() {
         twitterUsername,
         url,
         topRepositories: { totalCount, nodes, pageInfo },
+        followers: { totalCount: followers },
+        gists: { totalCount: gists },
       },
     }) => {
       setFetchData(false);
@@ -50,6 +57,8 @@ function SingleContributor() {
           url,
           totalRepos: totalCount,
           reposEndcursor: pageInfo.endCursor,
+          followers,
+          gists,
         });
       }
       setUserRepos([...userRepos, ...nodes]);
@@ -60,32 +69,39 @@ function SingleContributor() {
       cursor: userData?.reposEndcursor || null,
     },
     skip: !fetchData,
+    fetchPolicy: "no-cache",
   });
 
+  if (!userData && loading)
+    return <div className="spinner--dark mx-auto"></div>;
   return (
-    <div>
-      {loading && <p>loading</p>}
+    <div className="page">
       {userData && (
-        <div className="contributor">
-          <p>Name: {userData.name}</p>
-          <p>company: {userData.company}</p>
-          <p>bio: {userData.bio}</p>
-          <p>Twitter username: {userData.twitterUsername}</p>
-          <p>Avatar url: {userData.avatarUrl}</p>
-          <p>Github url: {userData.url}</p>
-          <p>Total repos: {userData.totalRepos}</p>
-        </div>
+        <PersonDetails
+          name={userData.name}
+          pictureUrl={userData.avatarUrl}
+          followers={userData.followers}
+          gists={userData.gists}
+        />
       )}
-      {userRepos.length > 1 &&
-        userRepos.map((repo) => (
-          <div className="contributor" key={repo.id}>
-            <p>Name: {repo.name}</p>
-          </div>
-        ))}
-
+      <div className="page-body">
+        <div className="contributor-bio">{userData?.bio}</div>
+        <h2 className="heading-tertiary">Top Repositories</h2>
+        {userRepos.length > 1 ? (
+          userRepos.map((repo) => (
+            <SingleRepo
+              name={repo.name}
+              description={repo.description}
+              key={repo.id}
+            />
+          ))
+        ) : (
+          <p>No Repositories</p>
+        )}
+      </div>
       {hasNextPage && (
-        <button onClick={() => setFetchData(true)}>
-          {loading ? "Loading" : "Fetch more"}
+        <button onClick={() => setFetchData(true)} className="button mx-auto">
+          Fetch more {loading && <div className="spinner--small"></div>}
         </button>
       )}
     </div>

@@ -1,0 +1,16 @@
+@import "../../styles/variables.scss";
+
+.entity {
+  height: 180px;
+  background: $primary-gradient;
+  padding: 30px 170px;
+
+  &__bio {
+    font-size: 14px;
+    color: $white;
+    margin-top: 5px;
+    max-width: 80%;
+    height: 35px;
+    overflow: hidden;
+  }
+}

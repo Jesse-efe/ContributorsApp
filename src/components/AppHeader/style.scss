@@ -1,0 +1,21 @@
+@import "../../styles/variables.scss";
+
+.app-header {
+  height: 60px;
+  background: $primary-gradient;
+  padding: 20px 50px;
+
+  &__menu {
+    list-style: none;
+    display: flex;
+  }
+
+  &__menu-item {
+    font-size: 15px;
+    font-weight: 700;
+    color: $white;
+    text-transform: uppercase;
+    margin-right: 25px;
+    cursor: pointer;
+  }
+}

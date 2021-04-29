@@ -15,8 +15,7 @@ const Welcome = () => {
     variables: { name: orgInput.current?.value.trim() || "angular" },
     skip: !fetchData,
     onCompleted: (result) => {
-      sessionStorage.setItem("organistionName", result.organization.login);
-      history.push("/contributors");
+      history.push(`/${result.organization.login}`);
       setFetchData(false);
     },
     onError: (error) => {
@@ -62,9 +61,9 @@ const Welcome = () => {
             placeholder="enter organisation name"
           />
         )}
-        <pre>{loading ? "loading" : message}</pre>
-        <button className="welcome__submit" onClick={onSubmit}>
-          GO!
+        <pre>{message}</pre>
+        <button className="button" onClick={onSubmit}>
+           {loading ? <div className="spinner--small"></div> : 'GO!'}
         </button>
         <button className="welcome__change-org-btn" onClick={changeOrgClick}>
           {showOrgInput ? "use default organisation" : "change organisation"}
