@@ -108,8 +108,7 @@ const Contributors = () => {
     users.sort(sortFunction);
     setData(users);
   };
-  console.log(orgInfo);
-    if (!orgInfo?.organization) return <Redirect to="/" />;
+  if (!orgInfo?.organization) return <Redirect to="/" />;
   return (
     <div className="page">
       <EntityInfo
@@ -121,14 +120,15 @@ const Contributors = () => {
       />
       <SortBar sortFunction={sortUsers} />
 
-      {loading && <div className="spinner--dark mx-auto"></div>}
-      <div className="contributors">
+      {!data && loading && <div className="spinner--dark mx-auto"></div>}
+      <div className="contributors page-body">
         {data &&
           data.map((person: node) => (
             <PersonCard
               pictureUrl={person.avatarUrl}
               name={person.name}
               bio={person.bio}
+              key={person.login}
               contributions={
                 person.contributionsCollection.contributionCalendar
                   .totalContributions

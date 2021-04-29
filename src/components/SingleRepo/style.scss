@@ -1,0 +1,25 @@
+@import "../../styles/variables.scss";
+
+.repo {
+  padding: 10px 15px;
+  box-shadow: 3px 5px 16px -9px rgba(169, 158, 158, 0.75);
+  margin-bottom: 15px;
+  cursor: pointer;
+
+  &:last-child {
+    margin-bottom: 50px;
+  }
+
+  &__name {
+    text-transform: capitalize;
+    color: $black;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  &__description {
+    color: $grey;
+    font-size: 13px;
+  }
+}

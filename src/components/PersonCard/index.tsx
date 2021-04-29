@@ -1,27 +1,31 @@
 import "./style.scss";
 
 interface cardProps {
-    pictureUrl: string,
-    name: string,
-    bio: string,
-    contributions: number,
-    gists: number,
-    followers: number,
-    repositories: number,
-    clickHandler: () => void,
+  pictureUrl: string;
+  name: string;
+  bio: string;
+  contributions: number;
+  gists: number;
+  followers: number;
+  repositories: number;
+  clickHandler: () => void;
 }
 
-const PersonCard = ({pictureUrl, name, bio, contributions, gists, followers, repositories, clickHandler}: cardProps) => {
+const PersonCard = ({
+  pictureUrl,
+  name,
+  bio,
+  contributions,
+  gists,
+  followers,
+  repositories,
+  clickHandler,
+}: cardProps) => {
   return (
     <div className="card" onClick={clickHandler}>
-      <img
-        src={pictureUrl}
-        alt="person"
-        className="card__picture"
-      />
+      <img src={pictureUrl} alt="person" className="card__picture" />
       <p className="card__name">{name}</p>
-      <p className="card__bio">{bio}
-      </p>
+      <p className="card__bio">{bio}</p>
       <div className="card__stats">
         <div className="card__stats-item">
           <span className="card__stats-field">contributions</span>

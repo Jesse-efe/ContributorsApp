@@ -1,7 +1,7 @@
-$primary-gradient: linear-gradient(
-  117deg,
-  rgba(66, 183, 237, 0.89) 0%,
-  rgba(159, 106, 228, 0.925) 100%
-);
 $white: #effbff;
 $black: #192433;
+$lightblue: rgba(66, 183, 237, 0.89);
+$purple: #9f6ae4ec;
+$grey: #909090;
+$lightgrey: #cacdd4;
+$primary-gradient: linear-gradient(117deg, $lightblue 0%, $purple 100%);

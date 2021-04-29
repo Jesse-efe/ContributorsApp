@@ -55,8 +55,11 @@ export const GET_USER_DETAILS = gql`
       twitterUsername
       websiteUrl
       url
-      status {
-        message
+      followers {
+        totalCount
+      }
+      gists {
+        totalCount
       }
       topRepositories(
         first: 30
@@ -66,6 +69,7 @@ export const GET_USER_DETAILS = gql`
         totalCount
         nodes {
           name
+          description
           id
         }
         pageInfo {

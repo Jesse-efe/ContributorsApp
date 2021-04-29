@@ -33,7 +33,7 @@
     height: 51px;
     overflow: hidden;
     font-size: 14px;
-    color: #909090;
+    color: $grey;
   }
 
   &__stats {
@@ -42,7 +42,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    border-top: 1px solid #cacdd4;
+    border-top: 1px solid $lightgrey;
     display: flex;
 
     &-item {
